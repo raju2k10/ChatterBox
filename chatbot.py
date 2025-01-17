@@ -29,14 +29,18 @@ st.subheader("🎥 Entertainment with AI")
 
 st.write("### Select a Genre:")
 
-# Create buttons for genres in blocks
+# Define genres
 genres = ["Thriller", "Action", "Comedy", "Drama", "Horror", "Sci-Fi", "Romance", "Adventure"]
-columns = st.columns(len(genres))  # Create columns for each genre
 
+# Create even-sized blocks
+rows = len(genres) // 4 + (1 if len(genres) % 4 != 0 else 0)  # Calculate the number of rows needed
 selected_genre = None
-for idx, genre in enumerate(genres):
-    if columns[idx].button(genre):
-        selected_genre = genre
+
+for row in range(rows):
+    cols = st.columns(4)  # Create 4 columns in each row
+    for col, genre in zip(cols, genres[row * 4:(row + 1) * 4]):  # Distribute genres evenly across columns
+        if col.button(genre):
+            selected_genre = genre
 
 # Process the selected genre
 if selected_genre:

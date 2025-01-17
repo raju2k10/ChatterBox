@@ -16,7 +16,7 @@ if 'buffer_memory' not in st.session_state:
 
 if "messages" not in st.session_state.keys(): # Initialize the chat message history
     st.session_state.messages = [
-        {"role": "assistant", "content": "How can I help you today?"}
+        {"role": "assistant", "content": "Hey! Looking for something to watch?"}
     ]
 
 # Initialize ChatOpenAI and ConversationChain

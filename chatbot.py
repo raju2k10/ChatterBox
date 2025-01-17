@@ -11,7 +11,7 @@ if 'buffer_memory' not in st.session_state:
 
 if "messages" not in st.session_state.keys():
     st.session_state.messages = [
-        {"role": "assistant", "content": "Hey! Looking for something to watch? You can ask about genres like thriller, action, or comedy, and I'll recommend three movies with details like actors, language, director, and IMDb rating. Try it out!"}
+        {"role": "assistant", "content": "Hey! Looking for something to watch? Select a genre below and I'll recommend three movies with details like actors, language, director, and IMDb rating."}
     ]
 
 # Initialize ChatOpenAI and ConversationChain
@@ -27,24 +27,25 @@ conversation = ConversationChain(memory=st.session_state.buffer_memory, llm=llm)
 st.title("🗣️ IMDb Chatbot")
 st.subheader("🎥 Entertainment with AI")
 
-if prompt := st.chat_input("Your question"):
+# Dropdown for genre selection
+genre = st.selectbox(
+    "Choose a genre:",
+    options=["Thriller", "Action", "Comedy", "Drama", "Horror", "Sci-Fi", "Romance", "Adventure"],
+    index=0
+)
+
+if st.button("Get Recommendations"):
+    prompt = f"Recommend three {genre} movies with details like actors, language, director, and IMDb rating."
     st.session_state.messages.append({"role": "user", "content": prompt})
 
-for message in st.session_state.messages:
-    with st.chat_message(message["role"]):
-        st.write(message["content"])
+    # Display chat history
+    for message in st.session_state.messages:
+        with st.chat_message(message["role"]):
+            st.write(message["content"])
 
-# If last message is not from assistant, generate a new response
-if st.session_state.messages[-1]["role"] != "assistant":
+    # Generate response
     with st.chat_message("assistant"):
         with st.spinner("Thinking..."):
-            if "regenerate" in prompt.lower():
-                # Logic to ensure new recommendations
-                st.session_state.buffer_memory.clear()
-                response = conversation.predict(input="Recommend another set of movies")
-            else:
-                response = conversation.predict(input=prompt)
-
+            response = conversation.predict(input=prompt)
             st.write(response)
-            message = {"role": "assistant", "content": response}
-            st.session_state.messages.append(message)
+            st.session_state.messages.append({"role": "assistant", "content": response})

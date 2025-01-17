@@ -32,14 +32,37 @@ st.write("### Select a Genre:")
 # Define genres
 genres = ["Thriller", "Action", "Comedy", "Drama", "Horror", "Sci-Fi", "Romance", "Adventure"]
 
-# Create even-sized blocks
+# CSS for custom buttons
+button_style = """
+    <style>
+    .button-style {
+        background-color: #f5c518;  /* IMDb Yellow */
+        color: black;
+        padding: 10px 20px;
+        margin: 5px;
+        text-align: center;
+        border: none;
+        border-radius: 5px;
+        font-weight: bold;
+        font-size: 16px;
+        cursor: pointer;
+    }
+    .button-style:hover {
+        background-color: #e4b007; /* Slightly darker yellow on hover */
+    }
+    </style>
+"""
+
+st.markdown(button_style, unsafe_allow_html=True)
+
+# Create even-sized buttons with yellow background
 rows = len(genres) // 4 + (1 if len(genres) % 4 != 0 else 0)  # Calculate the number of rows needed
 selected_genre = None
 
 for row in range(rows):
     cols = st.columns(4)  # Create 4 columns in each row
     for col, genre in zip(cols, genres[row * 4:(row + 1) * 4]):  # Distribute genres evenly across columns
-        if col.button(genre):
+        if col.markdown(f"<div class='button-style'>{genre}</div>", unsafe_allow_html=True):
             selected_genre = genre
 
 # Process the selected genre

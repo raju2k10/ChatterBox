@@ -27,7 +27,7 @@ if 'selected_genre' not in st.session_state:
 
 # Initialize ChatOpenAI and ConversationChain
 llm = ChatOpenAI(
-    model="llama-2-70b-chat",  # Using correct model identifier
+    model="llama-2-70b-chat",
     openai_api_key=st.secrets["TOGETHER_API_KEY"],
     openai_api_base="https://api.together.xyz/v1"
 )
@@ -57,7 +57,7 @@ with st.sidebar:
     if st.button("🤣 Comedy"):
         st.session_state.selected_genre = "Comedy"
     if st.button("🚀 Sci-Fi"):
-        st.session_state.selected_genre = "Science Fiction")
+        st.session_state.selected_genre = "Science Fiction"  # Fixed syntax error here
 
 # Handle genre selection
 if st.session_state.selected_genre and st.session_state.messages[-1]["role"] == "assistant":

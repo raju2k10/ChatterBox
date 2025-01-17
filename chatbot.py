@@ -11,7 +11,7 @@ if 'buffer_memory' not in st.session_state:
 
 if "messages" not in st.session_state.keys():
     st.session_state.messages = [
-        {"role": "assistant", "content": "Hey! Looking for something to watch? Select a genre below and I'll recommend three movies with details like actors, language, director, and IMDb rating."}
+        {"role": "assistant", "content": "Hey! Looking for something to watch? Click on a genre below and I'll recommend three movies with details like actors, language, director, and IMDb rating."}
     ]
 
 # Initialize ChatOpenAI and ConversationChain
@@ -27,15 +27,20 @@ conversation = ConversationChain(memory=st.session_state.buffer_memory, llm=llm)
 st.title("🗣️ IMDb Chatbot")
 st.subheader("🎥 Entertainment with AI")
 
-# Dropdown for genre selection
-genre = st.selectbox(
-    "Choose a genre:",
-    options=["Thriller", "Action", "Comedy", "Drama", "Horror", "Sci-Fi", "Romance", "Adventure"],
-    index=0
-)
+st.write("### Select a Genre:")
 
-if st.button("Get Recommendations"):
-    prompt = f"Recommend three {genre} movies with details like actors, language, director, and IMDb rating."
+# Create buttons for genres in blocks
+genres = ["Thriller", "Action", "Comedy", "Drama", "Horror", "Sci-Fi", "Romance", "Adventure"]
+columns = st.columns(len(genres))  # Create columns for each genre
+
+selected_genre = None
+for idx, genre in enumerate(genres):
+    if columns[idx].button(genre):
+        selected_genre = genre
+
+# Process the selected genre
+if selected_genre:
+    prompt = f"Recommend three {selected_genre} movies with details like actors, language, director, and IMDb rating."
     st.session_state.messages.append({"role": "user", "content": prompt})
 
     # Display chat history
